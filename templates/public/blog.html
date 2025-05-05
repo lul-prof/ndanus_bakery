@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="blog-container">
+    <h1>Our Blog</h1>
+    <div class="blog-grid">
+        {% for post in posts.items %}
+        <article class="blog-card">
+            {% if post.image_url %}
+            <div class="blog-image">
+                <img src="{{ url_for('static', filename='uploads/blog/' + post.image_url) }}" alt="{{ post.title }}">
+            </div>
+            {% endif %}
+            <div class="blog-content">
+                <h2>{{ post.title }}</h2>
+                <div class="blog-meta">
+                    <span class="date">{{ post.created_at.strftime('%B %d, %Y') }}</span>
+                    <span class="author">By {{ post.author.username }}</span>
+                </div>
+                <p class="excerpt">{{ post.content[:200] }}...</p>
+                <a href="{{ url_for('public.blog_post', id=post.id) }}" class="btn btn-secondary">Read More</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% if posts.pages > 1 %}
+    <div class="pagination">
+        {% if posts.has_prev %}
+        <a href="{{ url_for('public.blog', page=posts.prev_num) }}" class="btn btn-secondary">&laquo; Previous</a>
+        {% endif %}
+        
+        {% for page_num in posts.iter_pages(left_edge=2, left_current=2, right_current=2, right_edge=2) %}
+            {% if page_num %}
+                {% if posts.page == page_num %}
+                <span class="btn btn-primary">{{ page_num }}</span>
+                {% else %}
+                <a href="{{ url_for('public.blog', page=page_num) }}" class="btn btn-secondary">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span class="ellipsis">...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if posts.has_next %}
+        <a href="{{ url_for('public.blog', page=posts.next_num) }}" class="btn btn-secondary">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

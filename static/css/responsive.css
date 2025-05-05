@@ -1,0 +1,215 @@
+/* Responsive Styles for Ndanu's Little Treats */
+
+/* Tablet Devices (768px to 1024px) */
+@media screen and (max-width: 1024px) {
+    /* General Layout */
+    .container {
+        padding: 0 20px;
+    }
+    
+    /* Navigation */
+    .navbar {
+        padding: 15px 20px;
+    }
+    
+    .nav-links {
+        gap: 15px;
+    }
+    
+    /* Dashboard */
+    .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Product Grid */
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Footer */
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+/* Mobile Devices (up to 767px) */
+@media screen and (max-width: 767px) {
+    /* Navigation */
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        z-index: 100;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 21px;
+        cursor: pointer;
+    }
+    
+    .mobile-menu-toggle span {
+        height: 3px;
+        width: 100%;
+        background-color: var(--primary-color);
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+    
+    /* Dropdown Menus */
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        width: 100%;
+        padding: 10px 0 10px 20px;
+    }
+    
+    /* Dashboard */
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Product Grid */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    /* Cart & Checkout */
+    .cart-container,
+    .checkout-content {
+        flex-direction: column;
+    }
+    
+    .cart-summary,
+    .order-summary {
+        width: 100%;
+        margin-top: 30px;
+    }
+    
+    /* Admin Tables */
+    .admin-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    /* Forms */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Footer */
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Order Detail */
+    .order-meta {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Small Mobile Devices (up to 480px) */
+@media screen and (max-width: 480px) {
+    /* Product Grid */
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Gallery */
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Forms */
+    .auth-form {
+        padding: 20px;
+    }
+    
+    /* Product Detail */
+    .product-detail {
+        flex-direction: column;
+    }
+    
+    .product-image,
+    .product-info {
+        width: 100%;
+    }
+    
+    /* Cart Items */
+    .cart-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .cart-item img {
+        margin: 0 auto 15px;
+    }
+    
+    /* Order Cards */
+    .order-card {
+        padding: 15px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .footer,
+    .whatsapp-chat,
+    .mobile-menu-toggle {
+        display: none;
+    }
+    
+    .container {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .order-detail {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    body {
+        font-size: 12pt;
+        color: #000;
+        background: #fff;
+    }
+    
+    a {
+        text-decoration: none;
+        color: #000;
+    }
+    
+    .btn {
+        display: none;
+    }
+}

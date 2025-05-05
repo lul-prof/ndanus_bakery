@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="section-header">
+        <h1>Reports</h1>
+    </div>
+    
+    <div class="report-filters">
+        <h2>Filter Reports</h2>
+        <div class="filter-row">
+            <div class="form-group">
+                <label for="date_from">From Date</label>
+                <input type="date" id="date_from" name="date_from" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="date_to">To Date</label>
+                <input type="date" id="date_to" name="date_to" class="form-control">
+            </div>
+            <button type="button" class="btn btn-primary">Apply Filters</button>
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <h2>Sales Overview</h2>
+        <canvas id="sales-chart" class="chart"></canvas>
+    </div>
+    
+    <div class="chart-container">
+        <h2>Popular Products</h2>
+        <canvas id="products-chart" class="chart"></canvas>
+    </div>
+    
+    <div class="admin-table-container">
+        <h2>Sales Summary</h2>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Orders</th>
+                    <th>Revenue</th>
+                    <th>Average Order Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- This would be populated with actual data -->
+                <tr>
+                    <td>Today</td>
+                    <td>0</td>
+                    <td>KES 0.00</td>
+                    <td>KES 0.00</td>
+                </tr>
+                <tr>
+                    <td>This Week</td>
+                    <td>0</td>
+                    <td>KES 0.00</td>
+                    <td>KES 0.00</td>
+                </tr>
+                <tr>
+                    <td>This Month</td>
+                    <td>0</td>
+                    <td>KES 0.00</td>
+                    <td>KES 0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

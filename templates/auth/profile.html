@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>My Profile</h2>
+    <form method="POST" action="{{ url_for('auth.profile') }}" class="profile-form">
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" class="form-control" 
+                   value="{{ current_user.first_name or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" class="form-control" 
+                   value="{{ current_user.last_name or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" class="form-control" 
+                   value="{{ current_user.phone or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="address">Delivery Address</label>
+            <textarea id="address" name="address" class="form-control" rows="3">{{ current_user.address or '' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

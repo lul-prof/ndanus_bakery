@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Orders - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="admin-orders">
+    <h1>Manage Orders</h1>
+    
+    <div class="filters">
+        <form method="GET" class="filter-form">
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="">All Statuses</option>
+                    <option value="pending" {{ 'selected' if request.args.get('status') == 'pending' }}>Pending</option>
+                    <option value="processing" {{ 'selected' if request.args.get('status') == 'processing' }}>Processing</option>
+                    <option value="completed" {{ 'selected' if request.args.get('status') == 'completed' }}>Completed</option>
+                    <option value="cancelled" {{ 'selected' if request.args.get('status') == 'cancelled' }}>Cancelled</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date_from">From Date</label>
+                <input type="date" id="date_from" name="date_from" class="form-control"
+                       value="{{ request.args.get('date_from', '') }}">
+            </div>
+            <div class="form-group">
+                <label for="date_to">To Date</label>
+                <input type="date" id="date_to" name="date_to" class="form-control"
+                       value="{{ request.args.get('date_to', '') }}">
+            </div>
+            <button type="submit" class="btn btn-secondary">Filter</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.reference }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ order.items|length }} items</td>
+                    <td>{{ format_currency(order.total_amount) }}</td>
+                    <td>
+                        <form action="{{ url_for('admin.update_order_status', id=order.id) }}" method="POST"
+                              class="status-form">
+                            <select name="status" class="form-control status-select" 
+                                    onchange="this.form.submit()">
+                                <option value="pending" {{ 'selected' if order.status == 'pending' }}>Pending</option>
+                                <option value="processing" {{ 'selected' if order.status == 'processing' }}>Processing</option>
+                                <option value="completed" {{ 'selected' if order.status == 'completed' }}>Completed</option>
+                                <option value="cancelled" {{ 'selected' if order.status == 'cancelled' }}>Cancelled</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin.view_order', id=order.id) }}" class="btn btn-sm btn-secondary">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

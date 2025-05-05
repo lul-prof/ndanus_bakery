@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    <section class="about-hero">
+        <h1>About Ndanu's Little Treats</h1>
+        <p class="tagline">Crafting Sweet Memories Since 2020</p>
+    </section>
+
+    <section class="our-story">
+        <h2>Our Story</h2>
+        <div class="story-content">
+            <img src="{{ url_for('static', filename='images/bakery-story.jpg') }}" alt="Our Bakery Story">
+            <div class="story-text">
+                <p>Ndanu's Little Treats started as a small home-based bakery with a big dream. Our founder's passion for baking and creating delicious treats has turned into a beloved local bakery serving our community.</p>
+                <p>Every item is made with love, using only the finest ingredients and traditional recipes passed down through generations.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="our-values">
+        <h2>Our Values</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <i class="fas fa-heart"></i>
+                <h3>Quality</h3>
+                <p>We use only the finest ingredients to ensure every treat is perfect.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Service</h3>
+                <p>Customer satisfaction is at the heart of everything we do.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-leaf"></i>
+                <h3>Freshness</h3>
+                <p>All our products are baked fresh daily.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="team">
+        <h2>Meet Our Team</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='images/team/ndanu.jpg') }}" alt="Ndanu">
+                <h3>Ndanu</h3>
+                <p>Founder & Head Baker</p>
+            </div>
+            <!-- Add more team members as needed -->
+        </div>
+    </section>
+</div>
+{% endblock %}

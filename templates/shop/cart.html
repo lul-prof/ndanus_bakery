@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - Ndanu's Little Treats{% endblock %}
+
+
+{% block content %}
+<div class="cart-container">
+    <h1>Shopping Cart</h1>
+    
+    {% if cart_items %}
+    <div class="cart-items">
+        <div class="table-responsive">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td class="product-info">
+                            <img src="{{ url_for('static', filename='uploads/products/' + item.product.image_url) }}" 
+                                 alt="{{ item.product.name }}">
+                            <div>
+                                <h3>{{ item.product.name }}</h3>
+                                <p>{{ item.product.description[:100] }}...</p>
+                            </div>
+                        </td>
+                        <td>{{ format_currency(item.product.price) }}</td>
+                        <td>
+                            <form action="{{ url_for('shop.update_cart', product_id=item.product.id) }}" 
+                                  method="POST" class="quantity-form">
+                                <input type="number" name="quantity" value="{{ item.quantity }}" 
+                                       min="1" max="{{ item.product.stock }}" 
+                                       onchange="this.form.submit()">
+                            </form>
+                        </td>
+                        <td>{{ format_currency(item.product.price * item.quantity) }}</td>
+                        <td>
+                            <a href="{{ url_for('shop.remove_from_cart', product_id=item.product.id) }}" 
+                               class="btn btn-danger btn-sm" 
+                               onclick="return confirm('Are you sure you want to remove this item?')">
+                                Remove
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="cart-summary">
+            <h3>Cart Summary</h3>
+            <div class="summary-item">
+                <span>Subtotal:</span>
+                <span>{{ format_currency(total) }}</span>
+            </div>
+            <div class="summary-item">
+                <span>Delivery Fee:</span>
+                <span>{{ format_currency(delivery_fee) }}</span>
+            </div>
+            <div class="summary-item total">
+                <span>Total:</span>
+                <span>{{ format_currency(total + delivery_fee) }}</span>
+            </div>
+            <a href="{{ url_for('shop.checkout') }}" class="btn btn-primary btn-block">Proceed to Checkout</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <h2>Your cart is empty</h2>
+        <p>Browse our delicious treats and add some to your cart!</p>
+        <a href="{{ url_for('public.products') }}" class="btn btn-primary">Shop Now</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

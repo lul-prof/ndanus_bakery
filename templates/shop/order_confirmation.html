@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmation - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <div class="confirmation-content">
+        <div class="confirmation-header">
+            <i class="fas fa-check-circle"></i>
+            <h1>Thank You for Your Order!</h1>
+            <p>Order #{{ order.reference }}</p>
+        </div>
+
+        <div class="order-details">
+            <h2>Order Details</h2>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <h3>Order Date</h3>
+                    <p>{{ order.created_at.strftime('%B %d, %Y %H:%M') }}</p>
+                </div>
+                <div class="detail-item">
+                    <h3>Payment Method</h3>
+                    <p>{{ order.payment_method }}</p>
+                </div>
+                <div class="detail-item">
+                    <h3>Payment Status</h3>
+                    <p>{{ order.payment_status }}</p>
+                </div>
+                <div class="detail-item">
+                    <h3>Delivery Address</h3>
+                    <p>{{ order.delivery_address }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-items">
+            <h2>Order Items</h2>
+            <div class="items-list">
+                {% for item in order.items %}
+                <div class="order-item">
+                    <img src="{{ url_for('static', filename='uploads/products/' + item.product.image_url) }}" 
+                         alt="{{ item.product.name }}">
+                    <div class="item-details">
+                        <h3>{{ item.product.name }}</h3>
+                        <p>Quantity: {{ item.quantity }}</p>
+                        <p>Price: {{ format_currency(item.price) }}</p>
+                    </div>
+                    <div class="item-total">
+                        {{ format_currency(item.price * item.quantity) }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="order-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>{{ format_currency(order.subtotal) }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Fee:</span>
+                    <span>{{ format_currency(order.delivery_fee) }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>{{ format_currency(order.total_amount) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="confirmation-actions">
+            <a href="{{ url_for('auth.orders') }}" class="btn btn-primary">View My Orders</a>
+            <a href="{{ url_for('public.products') }}" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+
+        <div class="confirmation-note">
+            <p>A confirmation email has been sent to {{ current_user.email }}</p>
+            <p>If you have any questions about your order, please contact us at support@ndanustreats.com</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

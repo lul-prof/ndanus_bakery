@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p class="stat-number">{{ stats.total_orders }}</p>
+            <p class="stat-label">Last 30 days</p>
+        </div>
+        <div class="stat-card">
+            <h3>Revenue</h3>
+            <p class="stat-number">{{ format_currency(stats.total_revenue) }}</p>
+            <p class="stat-label">Last 30 days</p>
+        </div>
+        <div class="stat-card">
+            <h3>Products</h3>
+            <p class="stat-number">{{ stats.total_products }}</p>
+            <p class="stat-label">Active products</p>
+        </div>
+        <div class="stat-card">
+            <h3>Customers</h3>
+            <p class="stat-number">{{ stats.total_customers }}</p>
+            <p class="stat-label">Registered users</p>
+        </div>
+    </div>
+
+    <div class="dashboard-sections">
+        <section class="recent-orders">
+            <h2>Recent Orders</h2>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td>{{ order.reference }}</td>
+                            <td>{{ order.user.username }}</td>
+                            <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>{{ format_currency(order.total_amount) }}</td>
+                            <td><span class="status-badge status-{{ order.status }}">{{ order.status }}</span></td>
+                            <td>
+                                <a href="{{ url_for('admin.view_order', id=order.id) }}" class="btn btn-sm btn-secondary">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{{ url_for('admin.orders') }}" class="btn btn-primary">View All Orders</a>
+        </section>
+
+        <section class="low-stock">
+            <h2>Low Stock Alert</h2>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Current Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in low_stock_products %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.stock }}</td>
+                            <td>
+                                <a href="{{ url_for('admin.edit_product', id=product.id) }}" class="btn btn-sm btn-primary">Update Stock</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

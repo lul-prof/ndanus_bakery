@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.reference }} - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="admin-order-detail">
+    <div class="page-header">
+        <h1>Order #{{ order.reference }}</h1>
+        <div class="order-status">
+            <form action="{{ url_for('admin.update_order_status', id=order.id) }}" method="POST" class="status-form">
+                <select name="status" class="form-control status-select" onchange="this.form.submit()">
+                    <option value="pending" {{ 'selected' if order.status == 'pending' }}>Pending</option>
+                    <option value="processing" {{ 'selected' if order.status == 'processing' }}>Processing</option>
+                    <option value="completed" {{ 'selected' if order.status == 'completed' }}>Completed</option>
+                    <option value="cancelled" {{ 'selected' if order.status == 'cancelled' }}>Cancelled</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <div class="order-info">
+        <div class="info-section">
+            <h2>Customer Information</h2>
+            <p><strong>Name:</strong> {{ order.user.first_name }} {{ order.user.last_name }}</p>
+            <p><strong>Email:</strong> {{ order.user.email }}</p>
+            <p><strong>Phone:</strong> {{ order.user.phone }}</p>
+        </div>
+
+        <div class="info-section">
+            <h2>Delivery Information</h2>
+            <p><strong>Address:</strong> {{ order.delivery_address }}</p>
+            <p><strong>Notes:</strong> {{ order.delivery_notes or 'No notes provided' }}</p>
+        </div>
+
+        <div class="info-section">
+            <h2>Order Details</h2>
+            <p><strong>Order Date:</strong> {{ order.created_at.strftime('%B %d, %Y %H:%M') }}</p>
+            <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+            <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
+        </div>
+    </div>
+
+    <div class="order-items">
+        <h2>Order Items</h2>
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items %}
+                    <tr>
+                        <td>
+                            <div class="product-info">
+                                <img src="{{ url_for('static', filename='uploads/products/' + item.product.image_url) }}" 
+                                     alt="{{ item.product.name }}" class="product-thumbnail">
+                                <span>{{ item.product.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ format_currency(item.price) }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ format_currency(item.price * item.quantity) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Subtotal</strong></td>
+                        <td>{{ format_currency(order.subtotal) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Delivery Fee</strong></td>
+                        <td>{{ format_currency(order.delivery_fee) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Total</strong></td>
+                        <td>{{ format_currency(order.total_amount) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="order-actions">
+        <a href="{{ url_for('admin.orders') }}" class="btn btn-secondary">Back to Orders</a>
+        <button onclick="printOrder()" class="btn btn-primary">Print Order</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function printOrder() {
+    window.print();
+}
+</script>
+{% endblock %}

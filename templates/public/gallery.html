@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Gallery - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="gallery-container">
+    <h1>Our Gallery</h1>
+    <div class="gallery-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="cakes">Cakes</button>
+        <button class="filter-btn" data-filter="cookies">Cookies</button>
+        <button class="filter-btn" data-filter="pastries">Pastries</button>
+        <button class="filter-btn" data-filter="events">Events</button>
+    </div>
+
+    <div class="gallery-grid">
+        {% for image in gallery_images %}
+        <div class="gallery-item" data-category="{{ image.category }}">
+            <img src="{{ url_for('static', filename='uploads/gallery/' + image.filename) }}" 
+                 alt="{{ image.title }}"
+                 onclick="openLightbox(this)">
+            <div class="image-overlay">
+                <h3>{{ image.title }}</h3>
+                <p>{{ image.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="lightbox" class="lightbox">
+    <span class="close-lightbox">&times;</span>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-caption"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+{% endblock %}

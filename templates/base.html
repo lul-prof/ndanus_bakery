@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ndanu's Little Treats{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shop.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    {% if current_user.is_admin %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
+    {% endif %}
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{{ url_for('public.home') }}">Ndanu's Little Treats</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('public.home') }}">Home</a></li>
+            <li><a href="{{ url_for('public.products') }}">Products</a></li>
+            <li><a href="{{ url_for('public.gallery') }}">Gallery</a></li>
+            <li><a href="{{ url_for('public.about') }}">About</a></li>
+            <li><a href="{{ url_for('public.contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('public.blog') }}">Blog</a></li>
+            <li><a href="{{ url_for('shop.cart') }}">Cart <span class="cart-count">{{ cart_count }}</span></a></li>
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_admin %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Admin</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ url_for('admin.products') }}">Products</a></li>
+                            <li><a href="{{ url_for('admin.orders') }}">Orders</a></li>
+                            <li><a href="{{ url_for('admin.reports') }}">Reports</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">{{ current_user.username }}</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
+                        <li><a href="{{ url_for('auth.orders') }}">My Orders</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    </ul>
+                </li>
+            {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <div class="whatsapp-chat">
+        <a href="https://wa.me/+254742169773" target="_blank" class="whatsapp-button">
+            <i class="fab fa-whatsapp"></i>
+            Chat with us
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Phone: +254 XXX XXX XXX</p>
+                <p>Email: info@ndanustreats.com</p>
+                <p>Location: Nairobi, Kenya</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{{ url_for('public.about') }}">About Us</a></li>
+                    <li><a href="{{ url_for('public.products') }}">Products</a></li>
+                    <li><a href="{{ url_for('public.blog') }}">Blog</a></li>
+                    <li><a href="{{ url_for('public.contact') }}">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <form class="newsletter-form" action="{{ url_for('public.newsletter_signup') }}" method="POST">
+                    <input type="email" name="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ current_year }} Ndanu's Little Treats. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/your-kit-code.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/checkout.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+    {% if current_user.is_admin %}
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    {% endif %}
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

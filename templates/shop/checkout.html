@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Ndanu's Little Treats{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <h1>Checkout</h1>
+    
+    <div class="checkout-content">
+        <div class="checkout-form">
+            <form method="POST" action="{{ url_for('shop.checkout') }}" id="checkout-form">
+                <section class="form-section">
+                    <h2>Delivery Information</h2>
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" class="form-control" 
+                               value="{{ current_user.first_name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" class="form-control" 
+                               value="{{ current_user.last_name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" 
+                               value="{{ current_user.phone }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery_address">Delivery Address</label>
+                        <textarea id="delivery_address" name="delivery_address" class="form-control" 
+                                rows="3" required>{{ current_user.address }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery_notes">Delivery Notes (Optional)</label>
+                        <textarea id="delivery_notes" name="delivery_notes" class="form-control" 
+                                rows="2"></textarea>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2>Payment Method</h2>
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <input type="radio" id="mpesa" name="payment_method" value="mpesa" required>
+                            <label for="mpesa">
+                                <img src="{{ url_for('static', filename='images/mpesa-logo.png') }}" alt="M-Pesa">
+                                M-Pesa
+                            </label>
+                        </div>
+                        <div class="payment-method">
+                            <input type="radio" id="paypal" name="payment_method" value="paypal" required>
+                            <label for="paypal">
+                                <img src="{{ url_for('static', filename='images/paypal-logo.png') }}" alt="PayPal">
+                                PayPal
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+            </form>
+        </div>
+
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div class="summary-items">
+                {% for item in cart_items %}
+                <div class="summary-item">
+                    <div class="item-info">
+                        <img src="{{ url_for('static', filename='uploads/products/' + item.product.image_url) }}" 
+                             alt="{{ item.product.name }}">
+                        <div>
+                            <h4>{{ item.product.name }}</h4>
+                            <p>Quantity: {{ item.quantity }}</p>
+                        </div>
+                    </div>
+                    <div class="item-price">
+                        {{ format_currency(item.product.price * item.quantity) }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="summary-totals">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>{{ format_currency(subtotal) }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Fee:</span>
+                    <span>{{ format_currency(delivery_fee) }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>{{ format_currency(total) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/checkout.js') }}"></script>
+{% endblock %}
